@@ -6,13 +6,21 @@
 
 QT       += core gui multimedia multimediawidgets widgets
 
+CONFIG += c++11
+
 TARGET = Hit
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    livedisplaywidget.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    livedisplaywidget.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    livedisplaywidget.ui
+
+RESOURCES += \
+    resources.qrc

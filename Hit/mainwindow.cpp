@@ -4,15 +4,18 @@
 #include <QCameraInfo>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QSettings>
+#include <QSplashScreen>
 
 Q_DECLARE_METATYPE(QCameraInfo)
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    camera(0)
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    readSettings();
 
     //Camera devices:
     QActionGroup *videoDevicesGroup = new QActionGroup(this);
@@ -29,24 +32,33 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->menuDevices->addAction(videoDeviceAction);
     }
 
-    setCamera(QCameraInfo::defaultCamera());
+    //setCamera(QCameraInfo::defaultCamera());
+//    QPixmap splashPixmap(":/pic/icons/Slpash");
+//    Q_ASSERT(!splashPixmap.isNull());
+
+//    QSplashScreen splash(splashPixmap);
+//    splash.show();
+//    qApp->processEvents();
+//    splash.showMessage(QApplication::tr("Loading ..."));
+//    qApp->processEvents();
+
+    ui->liveView->setCamera(QCameraInfo::defaultCamera());
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete camera;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    bool isFullscreen;
+    bool isFullscreen; Q_UNUSED(isFullscreen);
 
     switch (event->key())
     {
     case Qt::Key_F10:
-        isFullscreen = ui->viewfinder->isFullScreen();
-        ui->viewfinder->setFullScreen(!isFullscreen);
+//        isFullscreen = ui->viewfinder->isFullScreen();
+//        ui->viewfinder->setFullScreen(!isFullscreen);
         event->accept();
         break;
     default:
@@ -63,19 +75,36 @@ void MainWindow::updateCameraState(QCamera::State state)
 
 void MainWindow::displayCameraError()
 {
-    QMessageBox::warning(this, tr("Camera error"), camera->errorString());
+    QMessageBox::warning(this, tr("Camera error"), QString());
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    Q_UNUSED(event);
+
+    writeSettings();
 }
 
 void MainWindow::setCamera(const QCameraInfo &cameraInfo)
 {
-    camera = new QCamera(cameraInfo);
-    Q_CHECK_PTR(camera);
 
-    connect(camera, SIGNAL(stateChanged(QCamera::State)), this, SLOT(updateCameraState(QCamera::State)));
-    connect(camera, SIGNAL(error(QCamera::Error)), this, SLOT(displayCameraError()));
-
-    camera->setViewfinder(ui->viewfinder);
-    camera->start();
 
     ui->statusBar->showMessage(cameraInfo.description());
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings(this);
+    settings.beginGroup("MainWindow");
+    settings.setValue("size", size());
+      settings.setValue("pos", pos());
+    settings.endGroup();
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings(this);
+    settings.beginGroup("MainWindow");
+    resize(settings.value("size", QSize(400, 400)).toSize());
+    move(settings.value("pos", QPoint(200, 200)).toPoint()); 	settings.endGroup();
 }

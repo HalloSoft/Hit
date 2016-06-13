@@ -24,7 +24,8 @@ private slots:
     void updateCameraState(QCamera::State state);
     void displayCameraError();
 
-
+protected:
+    void closeEvent(QCloseEvent *event);
 
 
 private:
@@ -32,7 +33,8 @@ private:
 
     void setCamera(const QCameraInfo &cameraInfo);
 
-    QCamera *camera;
+    void writeSettings();
+    void readSettings();
 };
 
 #endif // MAINWINDOW_H

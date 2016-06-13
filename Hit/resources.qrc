@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/pic">
+        <file>icons/Slpash.png</file>
+        <file>icons/Slpash.jpg</file>
+    </qresource>
+</RCC>

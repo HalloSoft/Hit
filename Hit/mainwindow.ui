@@ -16,7 +16,14 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QCameraViewfinder" name="viewfinder" native="true"/>
+     <widget class="LiveDisplayWidget" name="liveView" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>50</width>
+        <height>50</height>
+       </size>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -55,9 +62,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QCameraViewfinder</class>
+   <class>LiveDisplayWidget</class>
    <extends>QWidget</extends>
-   <header>qcameraviewfinder.h</header>
+   <header>livedisplaywidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
