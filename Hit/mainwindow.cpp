@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "aboutbox.h"
+#include "settingsdialog.h"
+
 #include <QCameraInfo>
 #include <QKeyEvent>
 #include <QMessageBox>
@@ -42,6 +45,10 @@ MainWindow::MainWindow(QWidget *parent) :
 //    splash.showMessage(QApplication::tr("Loading ..."));
 //    qApp->processEvents();
 
+    bool isConnected = false;                                                                   Q_UNUSED(isConnected);
+    isConnected = connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAboutBox()));    Q_ASSERT(isConnected);
+    isConnected = connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(showSettings())); Q_ASSERT(isConnected);
+
     ui->liveView->setCamera(QCameraInfo::defaultCamera());
 }
 
@@ -78,6 +85,18 @@ void MainWindow::displayCameraError()
     QMessageBox::warning(this, tr("Camera error"), QString());
 }
 
+void MainWindow::showAboutBox()
+{
+    AboutBox aboutBox;
+    aboutBox.exec();
+}
+
+void MainWindow::showSettings()
+{
+    SettingsDialog dialog;
+    dialog.exec();
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event);
@@ -97,7 +116,7 @@ void MainWindow::writeSettings()
     QSettings settings(this);
     settings.beginGroup("MainWindow");
     settings.setValue("size", size());
-      settings.setValue("pos", pos());
+    settings.setValue("pos", pos());
     settings.endGroup();
 }
 

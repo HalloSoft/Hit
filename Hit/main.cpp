@@ -13,6 +13,17 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("hallosoft.de");
     QCoreApplication::setApplicationName("Hallos Inspection Tool");
 
+    // Version
+    QString versionString = QString("%1.%2.%3.%4").arg(VERSION_MAJOR).arg(VERSION_MINOR).arg(VERSION_REVISION).arg(VERSION_BUILD);
+    a.setApplicationVersion(versionString);
+
+    qDebug() << "Version" << versionString;
+
+    // splash screen
+    QPixmap splashPixmap(":/pic/icons/Slpash.png");
+    Q_ASSERT(!splashPixmap.isNull());
+
+
     QSharedMemory sharedMemory;
     sharedMemory.setKey("HallosInspectionTool");
 
@@ -27,13 +38,10 @@ int main(int argc, char *argv[])
         exit(0); // Exit, a process is already running
     }
 
-    QPixmap splashPixmap(":/pic/icons/Slpash.jpg");
-    Q_ASSERT(!splashPixmap.isNull());
-
     QSplashScreen splash(splashPixmap);
     splash.show();
     qApp->processEvents();
-    splash.showMessage(QApplication::tr("Loading ..."));
+    splash.showMessage(QString("Version %1").arg(versionString), Qt::AlignBottom);
     qApp->processEvents();
 
     MainWindow w;

@@ -23,6 +23,8 @@ protected:
 private slots:
     void updateCameraState(QCamera::State state);
     void displayCameraError();
+    void showAboutBox();
+    void showSettings();
 
 protected:
     void closeEvent(QCloseEvent *event);
